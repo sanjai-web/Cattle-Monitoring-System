@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://kit.fontawesome.com/0e53af926d.js" crossorigin="anonymous"></script>
+</head>
+<body style="background-color: #f4f4f7;">
+    <!-- Header Section -->
+    <header>
+        <div id="header">
+            <div class="header-logo">
+                <a href="{% url 'home' %}"><img src="{% static 'images/logo1.png' %}" alt="" /></a>
+            </div>
+            <div class="header-list">
+                <nav class="header-list-nav">
+                    <ul>
+                        <li><a class="active" href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'scheme' %}">Scheme</a></li>
+                        <li><a href="{% url 'cattle' %}">Cattle</a></li>
+                        <li><a href="{% url 'veterinary' %}">veterinary</a></li>
+                        <li><a href="{% url 'adminlogin' %}">Admin</a></li>
+                        <li><a href="{% url 'login' %}">Logout</a></li>
+                    </ul>
+                </nav>
+                <div class="header-list-icon">
+                    <a href="{% url 'cart' %}"><i class="fa fa-bag-shopping"></i></a>
+                    <a href="{% url 'dashboard' %}"><i class="fa fa-user"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Section -->
+    <main>
+        <!-- Hero Section -->
+        <section id="hero">
+            <h4 style="color: #b3acf5;">Trade-in-offer</h4>
+            <h2>Super value deals</h2>
+            <h1>On all products</h1>
+            <p>Save more coupons & up to 70% off!</p>
+            <button>Shop now</button>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="section-p1">
+          <div class="f-box">
+              <img src="{% static 'images/features/f1.png' %}" alt="free shipping" />
+              <h6>Free shipping</h6>
+          </div>
+          <div class="f-box">
+              <img src="{% static 'images/features/f2.png' %}" alt="online order" />
+              <h6>online order</h6>
+          </div>
+          <div class="f-box">
+              <img src="{% static 'images/features/f3.png' %}" alt="save money" />
+              <h6>save money</h6>
+          </div>
+          <div class="f-box">
+              <img src="{% static 'images/features/f4.png' %}" alt="promotions" />
+              <h6>promotions</h6>
+          </div>
+          <div class="f-box">
+              <img src="{% static 'images/features/f5.png' %}" alt="happy sell" />
+              <h6>happy sell</h6>
+          </div>
+          <div class="f-box">
+              <img src="{% static 'images/features/f6.png' %}" alt="24/7 support" />
+              <h6>24/7 support</h6>
+          </div>
+      </section>
+      
+
+      <section id="off-banner" class="section-m1">
+        <h4>Cattle Food</h4>
+        <h2>Up to 70% Off - All Cattle Foods</h2>
+        
+      </section>
+
+   <!-- Product Section -->
+<section class="product-section section-p1">
+  <h1>Cattle Food</h1>
+  <p>Feed the Future: Quality Nutrition for Your Cattle</p>
+  <div class="pro-collection">
+      {% for product in products %}
+      <div class="product-cart">
+          {% if product.product_image %}
+          <img src="{{ product.product_image.url }}" alt="{{ product.product_name }}" />
+          {% else %}
+          <img src="{% static 'images/default-product.png' %}" alt="Default Product Image" style="width: 727px; height: 727px;" />
+          {% endif %}
+          <span>{{ product.brand_name }}</span>
+          <h4>{{ product.product_name }}</h4>
+           <!-- Speaker button to read the product name -->
+        
+          <div class="stars">
+              {% for i in "12345" %}
+              <i class="fa-solid fa-star"></i>
+              {% endfor %}
+          </div>
+          <h4 class="price">&#8377;{{ product.product_price }}</h4>
+          <button class="speaker-btn" onclick="speakText('{{ product.product_name }}')">
+            <i class="fa fa-volume-up"></i>
+        </button>
+          <a href="{% url 'add_to_cart' product.id %}">
+            <i class="fa-solid fa-cart-shopping buy-icon"></i>
+          </a>
+        
+        
+      </div>
+      {% endfor %}
+  </div>
+</section>
+
+
+        <!-- Other Sections -->
+        <!-- ... (Your existing sections like off-banner, additional product sections, etc.) -->
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        // Function to speak the product name using the Web Speech API
+        function speakText(text) {
+            // Check if the browser supports speech synthesis
+            if ('speechSynthesis' in window) {
+                var speech = new SpeechSynthesisUtterance(text);
+                speech.lang = 'en-US';  // Set the language to English (US)
+                // speech.lang = 'en-US'; 
+                window.speechSynthesis.speak(speech);
+            } else {
+                alert('Your browser does not support speech synthesis.');
+            }
+        }
+    </script>
+    
+   
+    <style>.speaker-btn {
+       color: #9e94f9;
+  background-color: #e3e6f3;
+  padding: 15px;
+  border-radius: 50px;
+  position: absolute;
+  left:160px;
+ border: none;
+  bottom: 10px;
+    }
+    
+    .speaker-btn:hover{
+        color: #988dfb;
+        background-color: #d8ddf7;
+    }
+    </style>
+
+
+
+<script src="{% static 'js/script.js' %}"></script>
+</body>
+</html>

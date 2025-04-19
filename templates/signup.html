@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  {% load static %}
+  <script src="https://kit.fontawesome.com/0e53af926d.js" crossorigin="anonymous"></script>
+  <title>Signup Page</title>
+</head>
+<body style="background-color: #e3e6f3; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+ <!-- Header -->
+ <header>
+  <div id="header">
+    <div class="header-logo">
+      <a >
+        <img src="{% static 'images/logo1.png' %}" alt="Logo" />
+      </a>
+    </div>
+    <div class="header-list">
+      <nav class="header-list-nav">
+        <ul>
+         
+          <li><a style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;" href="{% url 'admin_page' %} ">Admin</a></li>
+          
+        </ul>
+      </nav>
+      
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <!-- Signup Form Section -->
+  <div class="signup-section">
+    <div class="header">
+      <span>Join us today!</span>
+      <p>Sign up now to become a member.</p>
+    </div>
+    
+    <!-- Signup Form -->
+    <form method="POST" action="{% url 'signup' %}">
+      {% csrf_token %}
+      
+      <label for="name">Name:</label>
+      <input type="text" name="name" required>
+  
+      <label for="email">Email:</label>
+      <input type="email" name="email" required>
+  
+      <label for="password">Password:</label>
+      <input type="password" name="password" required>
+  
+      <label for="phone">Phone:</label>
+      <input type="text" name="phone">
+  
+      <label for="address">Address:</label>
+      <textarea name="address" rows="4"></textarea>
+  
+      <button type="submit">Sign Up</button>
+    </form>
+    
+    <span>Already a member? <a href="{% url 'login' %}">Login Here</a></span>
+  </div>
+
+  <!-- Image Section -->
+  <div class="image-section">
+    <img src="{% static 'images/banner/signupbanner.png' %}" alt="Signup Image">
+  </div>
+</div>
+
+</body>
+</html>
+
+<style>
+
+
+/* header styles */
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #e3e6f3;
+    padding: 20px 80px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .header-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .header-list-nav ul {
+    display: flex;
+  }
+  .header-list-nav ul li {
+    list-style-type: none;
+    padding: 0 20px;
+    position: relative;
+  }
+  .header-list-nav ul a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    transition: 0.3s ease;
+  }
+  .header-list-nav ul a:hover,
+  .header-list-nav ul a.active {
+    color: #088178;
+    content: "";
+  }
+  .header-list-icon a {
+    color: #1a1a1a;
+    padding-left: 20px;
+    transition: 0.3s ease;
+  }
+  .header-list-icon a:hover,
+  .header-list-nav ul a.active {
+    color: #088178;
+  }
+  .header-list-nav ul li a:hover::after,
+  .header-list-nav ul li a.active::after {
+    content: "";
+    width: 30%;
+    height: 2px;
+    background: #088178;
+    position: absolute;
+    bottom: -4px;
+    left: 20px;
+  }
+
+
+
+  /* Container holding both signup and image sections */
+  .container {
+    display: flex;
+    height: 100vh; /* Full height of the viewport */
+  }
+
+  /* Signup Section - Left half */
+  .signup-section {
+    flex: 1; /* Takes up 50% of the page width */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+    background-color: #e3e6f3;
+    margin-top: 5%;
+  }
+
+  .header {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+
+  .header p {
+    font-size: 18px;
+    font-weight: 400;
+    color: #706b6b;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  form input,
+  form textarea {
+    height: 40px;
+    outline: none;
+    border: 1px solid #cccccc;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 15px;
+    border-radius: 8px;
+  }
+
+  form textarea {
+   width: 95%;
+   max-width: 110%;
+   max-height: 150px;
+  
+   height: 60px;
+  }
+
+  /* Apply the style to the button */
+  form button {
+    background-color: rgba(17, 17, 226, 0.562);
+    color: #ffffff;
+    font-size: 17px;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  /* Button hover effect */
+  form button:hover {
+    background-color: rgba(17, 17, 226, 0.8);
+  }
+
+  form span {
+    text-align: center;
+    font-size: 16px;
+    padding-top: 10px;
+    color: #706b6b;
+  }
+
+  form span a {
+    text-decoration: none;
+    color: rgba(36, 36, 207, 0.671);
+    font-weight: 500;
+  }
+
+  /* Image Section - Right half */
+  .image-section {
+    flex: 1; /* Takes up 50% of the page width */
+    background-color: #f4f4f4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .image-section img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  @media (max-width: 768px) {
+    /* On small screens, stack the signup and image sections vertically */
+    .container {
+      flex-direction: column;
+    }
+
+    .image-section {
+      height: 50vh;
+    }
+  }
+</style>

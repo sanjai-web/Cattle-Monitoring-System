@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <script
+      src="https://kit.fontawesome.com/0e53af926d.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body style="background-color: #e3e6f3">
+    <!-- Header -->
+    <header>
+      <div id="header">
+        <div class="header-logo">
+         
+            <img src="{% static 'images/logo1.png' %}" alt="Logo" />
+         
+        </div>
+        <div class="header-list">
+          <nav class="header-list-nav">
+            <ul>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'scheme' %}">Scheme</a></li>
+              <li><a href="{% url 'login' %}">Logout</a></li>
+            </ul>
+          </nav>
+        
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Admin Section -->
+     <div class="project-status-container">
+    <div class="profile-container">
+      <div class="left-column">
+        <div class="profile-card">
+          <img
+            src="https://bootdey.com/img/Content/avatar/avatar7.png"
+            alt="Profile Picture"
+            class="profile-pic"
+          />
+          <h2>{{ user.name }}</h2>
+          <p>{{ user.job_title }}</p>
+          <p>{{ user.location }}</p>
+        </div>
+      </div>
+
+      <div class="right-column">
+        <!-- Add Product Form -->
+        <div class="project-status-container">
+          <!-- Add Product Form -->
+          <div class="project-status">
+            <h4 style="color: #1a1a1a">Add Product</h4>
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input
+                type="file"
+                name="product_image"
+                placeholder="Choose Product Image"
+              />
+              <textarea
+                name="product_name"
+                placeholder="Product Name"
+              ></textarea>
+              <input type="text" name="brand_name" placeholder="Brand Name" />
+              <input
+                type="number"
+                name="product_price"
+                placeholder="Product Price"
+              />
+              <button type="submit" name="submit_product">
+                Submit Product
+              </button>
+            </form>
+          </div>
+
+          <!-- Add Scheme Form -->
+          <div class="project-status">
+            <h4 style="color: #1a1a1a">Add Scheme</h4>
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <input
+                type="file"
+                name="scheme_image"
+                placeholder="Choose Scheme Image"
+              />
+              <textarea
+                name="scheme_name"
+                placeholder="Scheme Name"
+                required
+              ></textarea>
+              <input
+                type="text"
+                name="ministry"
+                placeholder="Ministry"
+                required
+              />
+              <textarea
+                name="scheme_summary"
+                placeholder="Scheme Summary"
+                required
+              ></textarea>
+              <input
+                type="text"
+                name="scheme_link"
+                placeholder="Scheme Link"
+                required
+              />
+              <button type="submit" name="submit_scheme">Submit Scheme</button>
+            </form>
+            {% if error %}
+            <div style="color: red">{{ error }}</div>
+            {% endif %}
+          </div>
+        </div>
+
+
+        <!-- Display All Products and Schemes Section -->
+        <div class="project-status-container">
+          <!-- Display All Products Section -->
+          <div class="project-status">
+            <h4 style="color: #1a1a1a">All Products</h4>
+            <table>
+              <tr>
+                <th>Name</th>
+                <th>Actions</th>
+              </tr>
+              {% for product in products %}
+              <tr>
+                <td>{{ product.product_name }}</td>
+                <td>
+                  <a href="{% url 'edit_product' product.id %}">Edit</a> |
+                  <form action="{% url 'delete_product' product.id %}" method="POST" style="display: inline">
+                      {% csrf_token %}
+                      <button type="submit" style="background: none; color: red; border: none; cursor: pointer;">
+                          Delete
+                      </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+            </table>
+          </div>
+
+          <!-- Display All Schemes Section -->
+          <div class="project-status">
+            <h4 style="color: #1a1a1a">All Schemes</h4>
+            <table>
+              <tr>
+                <th>Scheme Name</th>
+                <th>Actions</th>
+              </tr>
+              {% if schemes %}
+              {% for scheme in schemes %}
+              <tr>
+                <td>{{ scheme.scheme_name }}</td>
+                <td>
+                  <a href="{% url 'edit_scheme' scheme.id %}">Edit</a> |
+                  <form
+                    action="{% url 'delete_scheme' scheme.id %}"
+                    method="POST"
+                    style="display: inline"
+                  >
+                    {% csrf_token %}
+                    <button
+                      type="submit"
+                      style="
+                        background: none;
+                        color: red;
+                        border: none;
+                        cursor: pointer;
+                      "
+                    >
+                      Delete
+                    </button>
+                  </form>
+                </td>
+              </tr>
+              {% endfor %}
+              {% else %}
+              <tr>
+                <td colspan="4">No schemes available.</td>
+              </tr>
+              {% endif %}
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
+
+<style>
+  .project-status-container {
+    display: flex; /* Use flexbox layout */
+    justify-content: space-between; /* Space between items */
+    margin-top: 20px; /* Adjust top margin */
+  }
+
+  .project-status {
+    width: 48%; /* Adjust width to fit two sections side by side */
+  }
+
+  /* header styles */
+
+  #header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #e3e6f3;
+    padding: 20px 80px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+
+  .header-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .header-list-nav ul {
+    display: flex;
+  }
+  .header-list-nav ul li {
+    list-style-type: none;
+    padding: 0 20px;
+    position: relative;
+  }
+  .header-list-nav ul a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    transition: 0.3s ease;
+  }
+  .header-list-nav ul a:hover,
+  .header-list-nav ul a.active {
+    color: #088178;
+    content: "";
+  }
+  .header-list-icon a {
+    color: #1a1a1a;
+    padding-left: 20px;
+    transition: 0.3s ease;
+  }
+  .header-list-icon a:hover,
+  .header-list-nav ul a.active {
+    color: #088178;
+  }
+  .header-list-nav ul li a:hover::after,
+  .header-list-nav ul li a.active::after {
+    content: "";
+    width: 30%;
+    height: 2px;
+    background: #088178;
+    position: absolute;
+    bottom: -4px;
+    left: 20px;
+  }
+
+  /* home main styles */
+
+  /* hero section styles */
+
+  /* styles.css */
+  #hero {
+    background-image: url("/static/images/hero4.png"); /* Direct URL */
+    width: 100%;
+    height: 100vh;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 80px;
+  }
+
+  #hero h4 {
+    padding-bottom: 15px;
+    font-size: 40px;
+  }
+  #hero h2 {
+    font-size: 70px;
+  }
+  #hero h1 {
+    color: #088178;
+    font-size: 70px;
+  }
+  #hero button {
+    background-color: transparent;
+    background-image: url("/static/images/button.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 260px;
+    height: 60px;
+    border: 0;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 700;
+    color: #088178;
+    padding: 14px 65px 14px 65px;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "League Spartan", sans-serif;
+  }
+
+  body {
+    background-color: #f0f4f7;
+    padding: 20px;
+  }
+
+  .profile-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10%;
+  }
+
+  .left-column,
+  .right-column {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+  }
+
+  .left-column {
+    width: 25%;
+    text-align: center;
+  }
+
+  .right-column {
+    width: 70%;
+  }
+
+  .profile-pic {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+  }
+
+  .profile-card h2 {
+    margin-top: 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  .profile-card p {
+    color: #6c757d;
+    margin-top: 5px;
+  }
+
+  .profile-actions {
+    margin-top: 15px;
+  }
+
+  .follow-btn {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #007bff;
+    color: #fff;
+  }
+
+  .project-status-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .project-status {
+    width: 48%;
+  }
+
+  .project-status h4 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+
+  textarea,
+  input[type="file"],
+  input[type="text"],
+  input[type="number"] {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+
+  button[type="submit"] {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  /* Styles for the tables in the project-status section */
+  .project-status table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    background-color: #fff;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .project-status table th,
+  .project-status table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    font-size: 14px;
+  }
+
+  .project-status table th {
+    background-color: #088178;
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  .project-status table tr:hover {
+    background-color: #f1f1f1;
+  }
+
+  .project-status table img {
+    border-radius: 5px;
+    width: 50px;
+    height: auto;
+  }
+
+  .project-status table a {
+    color: #007bff;
+    text-decoration: none;
+    margin: 0 5px;
+  }
+
+  .project-status table a:hover {
+    text-decoration: underline;
+  }
+
+  .project-status table form {
+    display: inline;
+  }
+
+  .project-status table button {
+    background: none;
+    border: none;
+    color: red;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+  }
+
+  .project-status table button:hover {
+    text-decoration: underline;
+  }
+</style>
+
+<script>
+  function editScheme(id, name, ministry, summary, link) {
+    // Populate the form fields with the scheme's existing data
+    document.querySelector('[name="scheme_name"]').value = name;
+    document.querySelector('[name="ministry"]').value = ministry;
+    document.querySelector('[name="scheme_summary"]').value = summary;
+    document.querySelector('[name="scheme_link"]').value = link;
+
+    // Create or update a hidden input to store the scheme ID for editing
+    let schemeIdInput = document.querySelector('[name="scheme_id"]');
+    if (!schemeIdInput) {
+      schemeIdInput = document.createElement("input");
+      schemeIdInput.type = "hidden";
+      schemeIdInput.name = "scheme_id";
+      document.querySelector(".project-status form").appendChild(schemeIdInput);
+    }
+    schemeIdInput.value = id;
+  }
+</script>

@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="https://kit.fontawesome.com/0e53af926d.js" crossorigin="anonymous"></script>
+
+  <!-- Add basic CSS for modal styling -->
+  <style>
+    /* The Modal (background) */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      padding-top: 100px; /* Location of the box */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    }
+
+    /* Modal Content */
+    .modal-content {
+      background-color: #fefefe;
+      margin: auto;
+      padding: 20px;
+      border: 1px solid #888;
+      width: 80%;
+      max-width: 400px;
+      text-align: center;
+    }
+
+    /* Close button */
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+  </style>
+
+</head>
+<body style="background-color: #e3e6f3;">
+
+<header>
+    <div id="header">
+      <div class="header-logo">
+        <a href="index.html"><img src="{% static 'images/logo1.png' %}" alt="" /></a>
+      </div>
+      <div class="header-list">
+        <nav class="header-list-nav">
+          <ul>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'scheme' %}">Scheme</a></li>
+              <li><a href="{% url 'cattle' %}">Cattle</a></li>
+              <li><a href="{% url 'veterinary' %}">Veterinary</a></li>
+              <li><a href="{% url 'adminlogin' %}">Admin</a></li>
+              <li><a href="{% url 'login' %}">Logout</a></li>
+          </ul>
+        </nav>
+        <div class="header-list-icon">
+          <a class="active" href="{% url 'cart' %}"><i class="fa fa-bag-shopping"></i></a>
+          <a href="{% url 'dashboard' %}"><i class="fa fa-user"></i></a>
+        </div>
+      </div>
+    </div>
+</header>
+
+<div class="cart-wrapper">
+    <div class="cart-container">
+        <div class="cart-items">
+            <h2>Shopping Cart</h2>
+            <ul>
+                {% for item in cart_items %}
+                <li class="cart-item">
+                    <div class="item-details">
+                        <img src="{{ item.product.product_image.url }}" alt="{{ item.product.product_name }}" class="cart-img">
+                        <div>
+                            <h4 style="color: #020202;">{{ item.product.product_name }}</h4><br>
+                            <span style="color: #020202;">{{ item.product.product_price }}</span>
+                        </div>
+                    </div>
+                    <div class="item-quantity">
+                        <form action="{% url 'update_cart_quantity' item.id 'decrease' %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="quantity-btn">-</button>
+                        </form>
+                    
+                        <input type="text" value="{{ item.quantity }}" readonly>
+                    
+                        <form action="{% url 'update_cart_quantity' item.id 'increase' %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="quantity-btn">+</button>
+                        </form>
+                        <form action="{% url 'remove_from_cart' item.id %}" method="POST">
+                            {% csrf_token %}
+                            <button type="submit" class="remove-btn">
+                                <i style="margin-left: 100px;" class="fa-regular fa-circle-xmark"></i>
+                            </button>
+                        </form>        
+                </li>
+                {% endfor %}
+            </ul>
+            <br><br>
+            <a href="{% url 'home' %}" style="text-decoration: none; font-size: 15px; "> <i class="fa-solid fa-arrow-left"></i>  Back to shop</a>
+        </div>
+
+        <div class="cart-summary">
+            <h2>Summary</h2>
+            <br><br>
+            <p>Items: {{ cart_items|length }}</p>
+            <br><br>
+            <p>Total: &#8377;{{ cart_total }}</p>
+            <br><br>
+            <!-- Checkout button -->
+            <a href="{% url 'generate_invoice' %}" class="checkout-btn"  id="checkoutBtn">Checkout and Download Invoice</a>
+            <p style="color: #fe6868; margin-top: 30px;">*Accept only cash on Delivery</p>
+        </div>
+    </div>
+</div>
+
+<!-- The Modal -->
+<div id="paymentModal" class="modal">
+  <div class="modal-content" style="border-radius: 10px;">
+    <span class="close">&times;</span>
+    <p>Payment Successful!</p>
+  </div>
+</div>
+
+<!-- JavaScript to handle modal popup -->
+<script>
+  // Get the modal
+  var modal = document.getElementById("paymentModal");
+
+  // Get the button that opens the modal
+  var btn = document.getElementById("checkoutBtn");
+
+  // Get the <span> element that closes the modal
+  var span = document.getElementsByClassName("close")[0];
+
+  // When the user clicks the button, open the modal
+  btn.onclick = function() {
+    modal.style.display = "block";
+  }
+
+  // When the user clicks on <span> (x), close the modal
+  span.onclick = function() {
+    modal.style.display = "none";
+  }
+
+  // When the user clicks anywhere outside of the modal, close it
+  window.onclick = function(event) {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  }
+</script>
+
+</body>
+</html>
+
+
+
+  <style>
+/* Cart Wrapper */
+.cart-wrapper {
+    max-width: 1200px;
+    margin: 100px auto;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+/* Cart Container */
+.cart-container {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+/* Cart Items Section */
+.cart-items {
+    width: 70%;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.cart-items ul {
+    list-style: none;
+    padding: 0;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding: 20px 0;
+}
+
+.item-details {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.cart-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
+.item-quantity {
+    display: flex;
+    align-items: center;
+    margin-left: 10px;
+}
+
+.item-quantity button {
+    background: none;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.item-quantity input {
+    width: 40px;
+    text-align: center;
+    font-size: 16px;
+    margin: 0 10px;
+}
+
+.item-price {
+    font-size: 16px;
+    font-weight: bold;
+}
+
+/* Remove Button */
+.remove-btn {
+    background: none;
+    border: none;
+    color: rgb(255, 75, 75);
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Cart Summary Section */
+.cart-summary {
+    width: 30%;
+    background: #f1f1f1;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: right;
+}
+
+.cart-summary h2 {
+    font-size: 22px;
+    margin-bottom: 20px;
+}
+
+.cart-summary p {
+    font-size: 16px;
+}
+
+.cart-summary label {
+    display: block;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
+
+.cart-summary select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.cart-summary input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.checkout-btn:hover {
+    background-color: #45a049;
+}
+
+  </style>
+</body>
+</html>

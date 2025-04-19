@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+  <title>Veterinary Doctors</title>
+  {% load static %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="https://kit.fontawesome.com/0e53af926d.js" crossorigin="anonymous"></script>
+</head>
+<body style="background-color: #e3e6f3;">
+
+<header>
+    <div id="header">
+      <div class="header-logo">
+        <a href="index.html"><img src="{% static 'images/logo1.png' %}" alt="Logo" /></a>
+      </div>
+      <div class="header-list">
+        <nav class="header-list-nav">
+          <ul>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'scheme' %}">Scheme</a></li>
+              <li><a href="{% url 'cattle' %}">Cattle</a></li>
+              <li><a class="active" href="{% url 'veterinary' %}">Veterinary</a></li>
+              <li><a href="{% url 'adminlogin' %}">Admin</a></li>
+              <li><a href="{% url 'login' %}">Logout</a></li>
+          </ul>
+        </nav>
+        <div class="header-list-icon">
+          <a class="active" href="{% url 'cart' %}"><i class="fa fa-bag-shopping"></i></a>
+          <a href="{% url 'dashboard' %}"><i class="fa fa-user"></i></a>
+        </div>
+      </div>
+    </div>
+</header>
+<br><br><br><br><br><br><br><br>
+<section id="doctors" style="padding: 20px;">
+    <h2 style="text-align: center; margin-bottom: 20px;">Veterinary Doctors</h2>
+    <div class="doctor-list" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+        <!-- Doctor Card Template -->
+        <div class="doctor-card" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 300px;">
+            <h3>Dr. Sivaraj</h3>
+            <p><strong>Degree:</strong> BVSc & AH</p>
+            <p><strong>Mobile:</strong> +91 9876543210</p>
+            <p><strong>Location:</strong> Chennai, Tamil Nadu</p>
+            <p><strong>Available Timing:</strong> 9:00 AM - 1:00 PM</p>
+        </div>
+        
+        <div class="doctor-card" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 300px;">
+            <h3>Dr. Sara</h3>
+            <p><strong>Degree:</strong> DVM</p>
+            <p><strong>Mobile:</strong> +91 8765432109</p>
+            <p><strong>Location:</strong> Coimbatore, Tamil Nadu</p>
+            <p><strong>Available Timing:</strong> 10:00 AM - 3:00 PM</p>
+        </div>
+
+        <div class="doctor-card" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 300px;">
+            <h3>Dr. Priya </h3>
+            <p><strong>Degree:</strong> MVSc</p>
+            <p><strong>Mobile:</strong> +91 9988776655</p>
+            <p><strong>Location:</strong> Madurai, Tamil Nadu</p>
+            <p><strong>Available Timing:</strong> 8:00 AM - 12:00 PM</p>
+        </div>
+
+        <div class="doctor-card" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 300px;">
+            <h3>Dr. Ravi Kumar</h3>
+            <p><strong>Degree:</strong> BVSc</p>
+            <p><strong>Mobile:</strong> +91 9090909090</p>
+            <p><strong>Location:</strong> Tiruchirappalli, Tamil Nadu</p>
+            <p><strong>Available Timing:</strong> 11:00 AM - 4:00 PM</p>
+        </div>
+
+        <div class="doctor-card" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 300px;">
+            <h3>Dr. Gokul</h3>
+            <p><strong>Degree:</strong> DVM</p>
+            <p><strong>Mobile:</strong> +91 9123456789</p>
+            <p><strong>Location:</strong> Salem, Tamil Nadu</p>
+            <p><strong>Available Timing:</strong> 2:00 PM - 6:00 PM</p>
+        </div>
+
+        <div class="doctor-card" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 300px;">
+            <h3>Dr. Murali</h3>
+            <p><strong>Degree:</strong> MVSc</p>
+            <p><strong>Mobile:</strong> +91 9876545678</p>
+            <p><strong>Location:</strong> Erode, Tamil Nadu</p>
+            <p><strong>Available Timing:</strong> 9:00 AM - 12:00 PM</p>
+        </div>
+
+        <div class="doctor-card" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 300px;">
+            <h3>Dr. Karthik </h3>
+            <p><strong>Degree:</strong> BVSc</p>
+            <p><strong>Mobile:</strong> +91 9123451234</p>
+            <p><strong>Location:</strong> Thanjavur, Tamil Nadu</p>
+            <p><strong>Available Timing:</strong> 3:00 PM - 7:00 PM</p>
+        </div>
+
+        <div class="doctor-card" style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); width: 300px;">
+            <h3>Dr. Nisha</h3>
+            <p><strong>Degree:</strong> DVM</p>
+            <p><strong>Mobile:</strong> +91 9786543210</p>
+            <p><strong>Location:</strong> Puducherry, India</p>
+            <p><strong>Available Timing:</strong> 1:00 PM - 5:00 PM</p>
+        </div>
+    </div>
+</section>
+<!-- Video to capture from camera -->
+<video id="video" width="500" height="300" autoplay></video>
+<br>
+<button id="snap">Snap Photo</button>
+<canvas id="canvas" width="450" height="300" style="display: none;"></canvas>
+<div id="diseaseDetails"></div>
+
+<script>
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const snapButton = document.getElementById('snap');
+  const diseaseDetails = document.getElementById('diseaseDetails');
+  const context = canvas.getContext('2d');
+  const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+  // Request access to the user's camera
+  navigator.mediaDevices.getUserMedia({ video: true })
+    .then(stream => {
+      video.srcObject = stream;
+    })
+    .catch(err => {
+      console.error('Error accessing the camera:', err);
+    });
+
+  // Capture the image when the user clicks the snap button
+  snapButton.addEventListener('click', function () {
+    // Draw the current video frame onto the canvas
+    context.drawImage(video, 0, 0, 450, 300);
+
+    // Convert the canvas image to a base64 string
+    const imageData = canvas.toDataURL('image/png');
+
+    // Send the image to the backend for Google Custom Search
+    fetch('/detect_disease/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+      },
+      body: JSON.stringify({ image: imageData })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.results) {
+        let resultHTML = '<h3>Google Search Results:</h3>';
+        data.results.forEach(result => {
+          resultHTML += `
+            <div style="margin-bottom: 10px;">
+              <h4><a href="${result.link}" target="_blank">${result.title}</a></h4>
+              <p>${result.snippet}</p>
+            </div>`;
+        });
+        diseaseDetails.innerHTML = resultHTML;
+      } else {
+        diseaseDetails.innerText = 'No disease detected or error fetching results';
+      }
+    })
+    .catch((error) => {
+      console.error('Error detecting disease:', error);
+      diseaseDetails.innerText = 'Error fetching disease details';
+    });
+  });
+</script>
+
+<style>
+
+/* General body styling */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f4f4f9;
+  text-align: center;
+}
+
+/* Styling the video element */
+video {
+  border: 2px solid #333;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Styling the canvas element */
+canvas {
+  border: 2px solid #333;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+/* Styling the snap button */
+button#snap {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s ease;
+}
+
+button#snap:hover {
+  background-color: #218838;
+}
+
+/* Styling the disease details area */
+#diseaseDetails {
+  margin-top: 20px;
+  text-align: left;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Styling the disease result headers */
+#diseaseDetails h3 {
+  color: #333;
+
+  padding-bottom: 10px;
+}
+
+#diseaseDetails h4 {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+#diseaseDetails a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+#diseaseDetails a:hover {
+  text-decoration: underline;
+}
+
+/* Styling the snippets for the search results */
+#diseaseDetails p {
+  color: #555;
+  margin: 5px 0 15px;
+}
+
+
+</style>
+
+</body>
+</html>

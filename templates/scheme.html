@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/0e53af926d.js" crossorigin="anonymous"></script>
+    <title>Scheme</title>
+</head>
+<body style="background-color: #e3e6f3;">
+    <header>
+        <div id="header">
+            <div class="header-logo">
+                <a href="{% url 'home' %}"><img src="{% static 'images/logo1.png' %}" alt="Logo" /></a>
+            </div>
+            <div class="header-list">
+                <nav class="header-list-nav">
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a class="active" href="{% url 'scheme' %}">Scheme</a></li>
+                        <li><a href="{% url 'cattle' %}">Cattle</a></li>
+                        <li><a href="{% url 'veterinary' %}">Veterinary</a></li>
+                        <li><a href="{% url 'adminlogin' %}">Admin</a></li>
+                        <li><a href="{% url 'login' %}">Logout</a></li>
+                    </ul>
+                </nav>
+                <div class="header-list-icon">
+                    <a href="{% url 'cart' %}"><i class="fa fa-bag-shopping"></i></a>
+                    <a href="{% url 'dashboard' %}"><i class="fa fa-user"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="container">
+        <br><br><br><br>
+        <div class="InputContainer">
+            <input id="searchInput" class="input" placeholder="Search Scheme" onkeyup="searchSchemes()">
+        </div>
+
+        <div id="schemeList">
+            {% if schemes %}
+                {% for scheme in schemes %}
+                <div class="scheme-card">
+                    <div class="scheme-content">
+                        <h2 class="scheme-name" id="name-{{ forloop.counter }}">{{ scheme.scheme_name }}</h2>
+                        <h3>{{ scheme.ministry }}</h3>
+                        <p id="summary-{{ forloop.counter }}">{{ scheme.scheme_summary }}</p>
+                        <b>{{ scheme_link }}</b>
+                        <a href="{{ scheme.scheme_link }}" target="_blank">Read more</a>
+                        
+                        <!-- Speaker button -->
+                       
+                    </div>
+                    {% if scheme.scheme_image %}
+                        <div class="scheme-image">
+                            <button class="speaker-btn" onclick="readAloud('name-{{ forloop.counter }}', 'summary-{{ forloop.counter }}')">
+                                <i class="fas fa-volume-up"></i>
+                            </button>
+                            <img src="{{ scheme.scheme_image.url }}" alt="Scheme Image">
+                        </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <p>No schemes available.</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+       // Function to read both the scheme name and the summary aloud
+function readAloud(nameElementId, summaryElementId) {
+    // Get the scheme name and summary text
+    const nameText = document.getElementById(nameElementId).innerText;
+    const summaryText = document.getElementById(summaryElementId).innerText;
+
+    // Combine the scheme name and summary
+    const fullText = nameText + ". " + summaryText;
+
+    // Check if browser supports speech synthesis
+    if ('speechSynthesis' in window) {
+        const speech = new SpeechSynthesisUtterance(fullText);
+        speech.lang = 'en-US';  // Set the language
+        window.speechSynthesis.speak(speech);
+    } else {
+        alert('Sorry, your browser does not support text-to-speech functionality.');
+    }
+}
+
+   
+        function searchSchemes() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            const schemeList = document.getElementById('schemeList');
+            const schemeCards = schemeList.getElementsByClassName('scheme-card');
+            
+            for (let i = 0; i < schemeCards.length; i++) {
+                let schemeName = schemeCards[i].getElementsByClassName('scheme-name')[0];
+                if (schemeName) {
+                    const textValue = schemeName.textContent || schemeName.innerText;
+                    if (textValue.toLowerCase().indexOf(filter) > -1) {
+                        schemeCards[i].style.display = "";
+                    } else {
+                        schemeCards[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+
+
+.speaker-btn {
+       color: #b3acf5;
+  background-color: #e3e6f3;
+  padding: 15px;
+  border-radius: 50px;
+  
+ border: none;
+
+    }
+    
+    .speaker-btn:hover{
+        color: #a9a0f9;
+        background-color: #d8ddf7;
+    }
+
+        * {
+            font-family: "League Spartan", sans-serif;
+        }
+
+        .input {
+            border: 2px solid transparent;
+            width: 20em;
+            height: 2.5em;
+            padding-left: 0.8em;
+            padding-right: 0.8em;
+            outline: none;
+            background-color: #ffffff;
+            border-radius: 5px;
+            transition: all 0.5s;
+        }
+
+        .input:hover,
+        .input:focus {
+            border: 2px solid #684aec;
+            box-shadow: 0px 0px 0px 5px rgba(155, 74, 236, 0.2);
+            background-color: white;
+        }
+
+        body {
+            background-color: #e3e6f3;
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .scheme-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .scheme-card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .scheme-content {
+            flex: 1;
+            padding-right: 20px;
+        }
+
+        .scheme-content h2 {
+            font-size: 1.4em;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .scheme-content h3 {
+            font-size: 1.1em;
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .scheme-content p {
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #666;
+            margin-bottom: 15px;
+        }
+
+        .scheme-content a {
+            color: #088178;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+
+        .scheme-content a:hover {
+            color: #684aec;
+        }
+
+        .scheme-image {
+            max-width: 200px;
+            height: auto;
+            margin-left: 20px;
+        }
+
+        .scheme-image img {
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        #header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #e3e6f3;
+            padding: 20px 80px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+            z-index: 999;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .header-list {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-list-nav ul {
+            display: flex;
+        }
+
+        .header-list-nav ul li {
+            list-style-type: none;
+            padding: 0 20px;
+            position: relative;
+        }
+
+        .header-list-nav ul a {
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1a1a1a;
+            transition: 0.3s ease;
+        }
+
+        .header-list-nav ul a:hover,
+        .header-list-nav ul a.active {
+            color: #088178;
+            content: "";
+        }
+
+        .header-list-icon a {
+            color: #1a1a1a;
+            padding-left: 20px;
+            transition: 0.3s ease;
+        }
+
+        .header-list-icon a:hover {
+            color: #088178;
+        }
+
+        .header-list-nav ul li a:hover::after,
+        .header-list-nav ul li a.active::after {
+            content: "";
+            width: 30%;
+            height: 2px;
+            background: #088178;
+            position: absolute;
+            bottom: -4px;
+            left: 20px;
+        }
+    </style>
+</body>
+</html>

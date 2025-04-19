@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cattle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="https://kit.fontawesome.com/0e53af926d.js" crossorigin="anonymous"></script>
+    
+    <!-- Chart.js Import -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Firebase v9 Modular SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAjlMKwceeoWdt5jP2X82nam_9RCC8yNUM",
+            authDomain: "auto-cultivation.firebaseapp.com",
+            databaseURL: "https://auto-cultivation-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "auto-cultivation",
+            storageBucket: "auto-cultivation.appspot.com",
+            messagingSenderId: "276770819094",
+            appId: "1:276770819094:web:8d87d03c454b01f2bd7937"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const airQualityElement = document.getElementById('airQualityChart');
+            const airTemperatureElement = document.getElementById('airTemperatureChart');
+            const airHumidityElement = document.getElementById('airHumidityChart');
+            const tdsLevelElement = document.getElementById('tdsLevelChart');
+
+            // Reference to the 'cattle' node in Firebase
+            const cattleRef = ref(database, 'cattle');
+
+            // Fetch data from Firebase
+            onValue(cattleRef, (snapshot) => {
+                const data = snapshot.val();
+
+                // Update environment details text
+              // Update environment details text
+document.querySelector('.info-container ul li:nth-child(1)').textContent = `Air Quality (Gas Level): ${data.Gas_Level}%`;
+document.querySelector('.info-container ul li:nth-child(2)').textContent = `Air Temperature: ${data.Temperature}°C`;
+document.querySelector('.info-container ul li:nth-child(3)').textContent = `Air Humidity: ${data.Humidity}%`;
+document.querySelector('.info-container ul li:nth-child(4)').textContent = `TDS Level: ${data.TDS_Level}%`;
+
+// Create Donut Charts for each sensor data
+createDonutChart(airQualityElement, 'Air Quality (Gas Level)', data.Gas_Level, 3000);
+createDonutChart(airTemperatureElement, 'Air Temperature', data.Temperature, 50);
+createDonutChart(airHumidityElement, 'Air Humidity', data.Humidity, 100);
+createDonutChart(tdsLevelElement, 'TDS Level', data.TDS_Level, 100);
+            });
+
+            function createDonutChart(element, label, value, maxValue) {
+                new Chart(element, {
+                    type: 'doughnut',
+                    data: {
+                        labels: [label, 'Remaining'],
+                        datasets: [{
+                            label: label,
+                            data: [value, maxValue - value],
+                            backgroundColor: ['#00aced', '#e0e0e0'],
+                            borderWidth: 1,
+                        }]
+                    },
+                    options: {
+                        cutout: '70%',
+                        responsive: true,
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(tooltipItem) {
+                                        return `${label}: ${tooltipItem.raw}`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body style="background-color: #e3e6f3; height: 1000px;">
+    <header>
+        <div id="header">
+            <div class="header-logo">
+                <a href="{% url 'home' %}"><img src="{% static 'images/logo1.png' %}" alt="Logo"></a>
+            </div>
+            <div class="header-list">
+                <nav class="header-list-nav">
+                    <ul>
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'scheme' %}">Scheme</a></li>
+                        <li><a class="active" href="{% url 'cattle' %}">Cattle</a></li>
+                        <li><a href="{% url 'veterinary' %}">Veterinary</a></li>
+                        <li><a href="{% url 'adminlogin' %}">Admin</a></li>
+                        <li><a href="{% url 'login' %}">Logout</a></li>
+                    </ul>
+                </nav>
+                <div class="header-list-icon">
+                    <a href="{% url 'cart' %}"><i class="fa fa-bag-shopping"></i></a>
+                    <a href="{% url 'dashboard' %}"><i class="fa fa-user"></i></a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <img class="image1" src="/static/images/hero6.png">
+    <div id="hero5">
+        <div class="contents">
+            <div class="info-container">
+                <h2>Current Environment Details</h2>
+                <ul>
+                    <li><strong>Air Quality (Gas Level):</strong></li>
+                    <li><strong>Air Temperature:</strong></li>
+                    <li><strong>Air Humidity:</strong></li>
+                    <li><strong>TDS Level:</strong></li>
+                </ul>
+            </div>
+
+            <!-- Container for optimal ranges for cattle growth -->
+            <div class="optimal-container">
+                <h2>Optimal Ranges for Cattle Growth</h2>
+                <ul>
+                    <li><strong>Air Temperature:</strong> 10-25°C (50-77°F)</li>
+                    <li><strong>Air Humidity:</strong> 50-70% for maintaining hydration and preventing respiratory issues.</li>
+                    <li><strong>TDS Level:</strong> Optimal range depends on water quality standards.</li>
+                    <li><strong>Air Quality (Gas Level):</strong> Clean and free of harmful gases like ammonia and methane to ensure better breathing and overall health.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Canvas for Donut Charts -->
+        <div class="chart-container">
+            <div class="r1">
+                <canvas class="box1" id="airQualityChart" width="90" height="90"></canvas>
+                <canvas class="box1" id="airTemperatureChart" width="90" height="90"></canvas>
+            </div>
+            <div class="r2">
+                <canvas class="box1" id="airHumidityChart" width="90" height="90"></canvas>
+                <canvas class="box1" id="tdsLevelChart" width="90" height="90"></canvas>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<style>
+
+
+
+.image1{
+    display: inline-block;
+    height:550px;
+    width:350px;
+    position: relative;
+    top: 160px;
+    left: 50px;
+}
+.chart-container {
+    display: grid;
+    grid-template-columns: 400px 400px;
+    grid-template-rows: 500px 500px;
+    justify-content: center; /* Center the items */
+    margin-bottom: 20px; /* Add space below */
+    padding: 20px;
+}
+
+.chart-container canvas {
+    width: 45%; /* Set each canvas to take up 45% of the container width */
+    margin: 10px; /* Add some space between canvases */
+    max-height: 200px; /* Optional: set a max height */
+    background-color: #fcfdfe;
+    margin-top: 50px;
+   border-radius: 8px;
+}
+
+
+
+#hero5 { 
+    width: 770px;
+    height: 900px;
+    display: grid;
+    grid-template-columns: 730px;
+    grid-template-rows: 230px 250px 250px;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 0 80px;
+    position:relative;
+    top: -460px;
+    left: 600px;
+}
+
+.contents{
+    display: grid;
+    grid-template-columns: 400px 400px;
+}
+.info-container{
+    height: 220px;
+    padding-right: 10px ;
+}
+.info-container, .optimal-container {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    height: 250px;
+    margin: 20px 0;
+    margin-right: 20px;
+}
+.box1{
+    height: 100px;
+    padding: 20px;
+}
+
+h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+    color: #088178;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+ul li {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #1a1a1a;
+}
+
+* {
+    font-family: "League Spartan", sans-serif;
+}
+
+#header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #e3e6f3;
+    padding: 20px 80px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.06);
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.header-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-list-nav ul {
+    display: flex;
+}
+
+.header-list-nav ul li {
+    list-style-type: none;
+    padding: 0 20px;
+    position: relative;
+}
+
+.header-list-nav ul a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a1a;
+    transition: 0.3s ease;
+}
+
+.header-list-nav ul a:hover,
+.header-list-nav ul a.active {
+    color: #088178;
+}
+
+.header-list-icon a {
+    color: #1a1a1a;
+    padding-left: 20px;
+    transition: 0.3s ease;
+}
+
+.header-list-icon a:hover,
+.header-list-nav ul a.active {
+    color: #088178;
+}
+
+.header-list-nav ul li a:hover::after,
+.header-list-nav ul li a.active::after {
+    content: "";
+    width: 30%;
+    height: 2px;
+    background: #088178;
+    position: absolute;
+    bottom: -4px;
+    left: 20px;
+}
+</style>
